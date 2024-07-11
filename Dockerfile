@@ -1,8 +1,8 @@
-ARG GO_VERSION=1.21
+ARG GO_VERSION=1.22
 
 FROM ghcr.io/loong64/golang:${GO_VERSION}-trixie AS builder
 
-ARG BUILDX_VERSION=v0.14.1
+ARG BUILDX_VERSION=v0.16.0
 
 RUN set -ex; \
     ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime; \
