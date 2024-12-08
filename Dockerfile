@@ -28,7 +28,7 @@ ARG LDFLAGS="-w -s"
 RUN set -ex; \
     cd /opt/buildx; \
     mkdir /opt/buildx/dist; \
-    go build -ldflags "$(cat /tmp/.ldflags) ${LDFLAGS}" -o /opt/buildx/dist/buildx ./cmd/buildx; \
+    go build -trimpath -ldflags "$(cat /tmp/.ldflags) ${LDFLAGS}" -o /opt/buildx/dist/buildx ./cmd/buildx; \
     cd /opt/buildx/dist; \
     mv buildx buildx-${BUILDX_VERSION}-linux-$(uname -m); \
     echo "$(sha256sum buildx-${BUILDX_VERSION}-linux-$(uname -m) | awk '{print $1}') buildx-${BUILDX_VERSION}-linux-$(uname -m)" > "checksums.txt";
