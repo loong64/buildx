@@ -20,6 +20,11 @@ jobs:
         run: |
           APP_VERSION=$(curl -s "https://api.github.com/repos/${{ matrix.repo }}/releases/latest" | jq -r .tag_name)
           GO_VERSION=$(curl -sSL https://github.com/${{ matrix.repo }}/raw/${APP_VERSION}/Dockerfile | grep '^ARG GO_VERSION=' | awk -F "=" '{print $2}')
+          if [ -z "${APP_VERSION}" ] || [ "${APP_VERSION}" == "null" ] || [ -z "${GO_VERSION}" ] || [ "${GO_VERSION}" == "null" ]; then
+            echo "Failed to get version"
+            exit 1
+          fi
+          
           echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_ENV
           sed -i "s@ARG GO_VERSION=.*@ARG GO_VERSION=${GO_VERSION}@g" Dockerfile
           sed -i "s@ARG BUILDX_VERSION=.*@ARG BUILDX_VERSION=${APP_VERSION}@g" Dockerfile
