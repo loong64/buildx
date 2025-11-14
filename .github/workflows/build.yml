@@ -13,7 +13,7 @@ jobs:
         app: [buildx]
         repo: ['docker/buildx']
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: docker/setup-buildx-action@v3
 
       - name: Get Version
@@ -72,7 +72,7 @@ jobs:
           APP_VERSION=$(curl -s "https://api.github.com/repos/${{ matrix.repo }}/releases/latest" | jq -r .tag_name)
           echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_ENV
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{ env.APP_VERSION }}
         
@@ -87,7 +87,7 @@ jobs:
 
       - name: Setup QEMU
         if : steps.create-binaries.outputs.create == '1'
-        run: docker run --rm --privileged ghcr.io/loong64/qemu-user-static --reset -p yes
+        uses: docker/setup-qemu-action@v3
 
       - name: Build Binaries
         if : steps.create-binaries.outputs.create == '1'
